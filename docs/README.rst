@@ -40,13 +40,13 @@ For example:
 
 .. code:: json
 
-  {
-    "white": 4,
-    "blue": 17,
-    "green": 27,
-    "yellow": 22,
-    "red": 5
-  }
+   {
+     "white": 4,
+     "blue": 17,
+     "green": 27,
+     "yellow": 22,
+     "red": 5
+   }
 
 You can use the ``pinout`` command of ``gpiozero`` (as explained here
 `raspberrypi.org`_) to get the current GPIO PIN numbers:
@@ -74,7 +74,23 @@ To run the developpement server:
    led-api
 
 Join the ``http://<your_IP_address>:5000`` URL to get the swagger
-interface.
+interface:
+
+.. figure:: ./_static/swagger-ui.png
+   :alt: Swagger UI
+
+   Swagger UI
+
+You can now use this Swagger interface or your favorite REST tool to change power status of some LED:
+
+.. code:: bash
+
+   # Example with curl to start blink on the red LED
+   curl "http://192.168.1.65:5000/colors/red" \
+        -X POST \
+        -H "accept: application/json" \
+        -H "Content-Type: application/json" \
+        -d "{  \"on\": true,  \"blink\": true}"
 
 
 .. _raspberrypi.org: https://www.raspberrypi.org/documentation/usage/gpio/

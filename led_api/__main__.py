@@ -13,9 +13,10 @@ logger = logging.getLogger(__name__)
 led_setup = {}
 
 app = Flask(__name__)
-app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
-app.config.SWAGGER_UI_OPERATION_ID = True
-app.config.SWAGGER_UI_REQUEST_DURATION = True
+app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
+app.config['SWAGGER_UI_OPERATION_ID'] = True
+app.config['SWAGGER_UI_REQUEST_DURATION'] = True
+app.config['RESTPLUS_MASK_SWAGGER'] = False
 api = Api(
     app,
     version='1.0',
@@ -63,9 +64,11 @@ class Colors(Resource):
     """Set and get the status for the LEDs.
     """
 
-    # #@ns_cm.marshal_with(machine_status) #TODO
+    # #@ns_col.marshal_with(machine_status) #TODO
     # def get(self, color):
     #     """Get the current status of a colored LED.
+    #
+    #     Supported colors are: red/green/yellow/blue.
     #     """
     #     logger.info("Current status of a colored LED is requested")
     #     return {
@@ -76,7 +79,10 @@ class Colors(Resource):
     @ns_col.expect(color_request)
     def post(self, color):
         """Update the state of a colored LED.
+
+        Supported colors are: red/green/yellow/blue.
         """
+        color = color.lower()
         if not led_setup.get(color):
             abort(404, f"Unconfigured color: {color}")
         req_on = request.json.get('on', False) # default is off command
