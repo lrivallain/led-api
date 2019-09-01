@@ -1,0 +1,15 @@
+dist: bionic # because using py>=3.7
+language: python
+python:
+  - "3.6"
+  - "3.7"
+install:
+  - pip install -e .
+  - pip install Pygments mock sphinx sphinx-rtd-theme recommonmark # just to build docs
+  - pip install -r docs/requirements.txt
+  - mkdir -p ~/.led-api
+  - cp ./logging.json ~/.led-api/
+  - cp ./led_config.json ~/.led-api/
+script:
+  - which led-api # only test if ready to be used
+  - cd docs/ && make html # test making docs
